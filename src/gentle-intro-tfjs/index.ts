@@ -1,9 +1,35 @@
 import * as tf from "@tensorflow/tfjs-node";
 
-export const genteleTensorflowJS = () => {
-  //   basicCapabilitiesDemo();
-  optimizationExample();
+// all based on: https://blog.tensorflow.org/2018/04/a-gentle-introduction-to-tensorflowjs.html
+export const genteleTensorflowJS = async () => {
+  // basicCapabilitiesDemo();
+
+  // optimizationExample();
+
+  // teach my computer how to do a XOR
+  await neuralNetworkXOR();
 };
+
+async function neuralNetworkXOR() {
+  const xs = tf.tensor2d([
+    [0, 0],
+    [0, 1],
+    [1, 0],
+    [1, 1],
+  ]);
+  const xy = tf.tensor2d([[0], [1], [1], [0]]);
+
+  const model = tf.sequential();
+  model.add(tf.layers.dense({ units: 8, inputShape: [2], activation: "tanh" }));
+  model.add(tf.layers.dense({ units: 1, activation: "sigmoid" }));
+  const optimizer = tf.train.sgd(0.1);
+  model.compile({ optimizer, loss: "binaryCrossentropy" });
+  await model.fit(xs, xy, {
+    batchSize: 1,
+    epochs: 5000,
+  });
+  (model.predict(xs) as tf.Tensor).print();
+}
 
 function optimizationExample() {
   //  f(x) = x⁶+2x⁴+3x²+x+1

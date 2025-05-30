@@ -7,7 +7,7 @@ try {
   console.log(err);
 }
 
-function main() {
-  genteleTensorflowJS();
+async function main() {
+  await genteleTensorflowJS();
   // crudeALS();
 }
