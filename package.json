@@ -24,7 +24,5 @@
     "test": "jest",
     "test-watch": "jest --watch"
   },
-  "dependencies": {
-    "danfojs-node": "^1.2.0"
-  }
+  "dependencies": {}
 }
