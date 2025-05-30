@@ -20,6 +20,7 @@
     "start": "nodemon",
     "debug": "node --inspect-brk -r ts-node/register ./src/index.ts",
     "build": "tsc",
+    "execute": "rm -rf ./dist && yarn build && node ./dist/index.js",
     "test": "jest",
     "test-watch": "jest --watch"
   },

@@ -1,37 +1,48 @@
 import { argMin } from "./argmin";
+import { matrixPrint } from "./mathPrint";
 
-const userProductsMatrix = [
-  [0.5, null, 4],
-  [1, 3, 5],
-];
-console.log("user-products matrix", userProductsMatrix);
+try {
+  main();
+} catch (err) {
+  console.log(err);
+}
 
-const userMatrix = [1, 1];
-const productsMatrix: Array<number | null> = [null, null, null];
+function main() {
+  const userProductsMatrix = [
+    [0.5, null, 4],
+    [1, 3, 5],
+  ];
 
-for (let iterations = 0; iterations < 30; iterations++) {
-  // for (let iterations = 0; iterations < 200; iterations++) {
-  for (let i = 0; i < productsMatrix.length; i++) {
-    // producst matrix depends on userMatrix and userProducstsMatrix
-    // 2 * x = 0.5 és 3 * x = 1.5
-    // 0.5 / 2 és 1.5 /3
-    let coefficients: number[] = [];
-    for (let j = 0; j < userMatrix.length; j++) {
-      if (userProductsMatrix[j][i] != null) {
-        coefficients.push((userProductsMatrix[j][i] as number) / userMatrix[j]);
-      }
-    }
-    if (coefficients.length != userMatrix.length) {
-      productsMatrix[i] = coefficients[0];
-    } else {
-      productsMatrix[i] = argMin(coefficients);
-    }
+  let userMatrix = [1, 1];
+  let productsMatrix: Array<number | null> = [null, null, null];
+
+  for (let iterations = 0; iterations < 40; iterations++) {
+    productsMatrix = calculateProductsMatrix(
+      userProductsMatrix,
+      userMatrix,
+      productsMatrix
+    );
+
+    userMatrix = calculateUserMatrix(
+      userProductsMatrix,
+      userMatrix,
+      productsMatrix
+    );
   }
-  // now we need to fix the productsMatrix
+
+  userProductsMatrix[0][1] = userMatrix[0] * (productsMatrix[1] as number);
+  console.log("User - Products matrix after ASL:");
+  matrixPrint(userProductsMatrix as number[][]);
+}
+
+function calculateUserMatrix(
+  userProductsMatrix: (number | null)[][],
+  initialUserMatrix: number[],
+  productsMatrix: (number | null)[]
+) {
   let coefficients: number[][] = [];
-  for (let i = 0; i < userMatrix.length; i++) {
-    // 0.5 = 0.75 * u és 1 = 0.75 * u
-    // 0.5 / 0.75 = u és 1 / 0.75 = u
+  const userMatrix: number[] = [...initialUserMatrix];
+  for (let i = 0; i < initialUserMatrix.length; i++) {
     for (let j = 0; j < productsMatrix.length; j++) {
       if (userProductsMatrix[i][j] != null) {
         if (coefficients[i] != null) {
@@ -54,7 +65,27 @@ for (let iterations = 0; iterations < 30; iterations++) {
     }
     userMatrix[i] = argMin(coefficients[i]);
   }
+  return userMatrix;
 }
-console.log("products:", productsMatrix);
-console.log("users:", userMatrix);
-console.log(userProductsMatrix);
+
+function calculateProductsMatrix(
+  userProductsMatrix: (number | null)[][],
+  userMatrix: number[],
+  initialProductsMatrix: (number | null)[]
+) {
+  const productsMatrix: number[] = [];
+  for (let i = 0; i < initialProductsMatrix.length; i++) {
+    let coefficients: number[] = [];
+    for (let j = 0; j < userMatrix.length; j++) {
+      if (userProductsMatrix[j][i] != null) {
+        coefficients.push((userProductsMatrix[j][i] as number) / userMatrix[j]);
+      }
+    }
+    if (coefficients.length != userMatrix.length) {
+      productsMatrix[i] = coefficients[0];
+    } else {
+      productsMatrix[i] = argMin(coefficients);
+    }
+  }
+  return productsMatrix;
+}
