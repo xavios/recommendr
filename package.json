@@ -18,9 +18,10 @@
   },
   "scripts": {
     "start": "nodemon",
+    "debug": "node --inspect-brk -r ts-node/register ./src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "test-watch": "jest"
+    "test-watch": "jest --watch"
   },
   "dependencies": {
     "danfojs-node": "^1.2.0"
