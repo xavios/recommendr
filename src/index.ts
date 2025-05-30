@@ -1,4 +1,5 @@
 import { crudeALS } from "./curde-als";
+import { genteleTensorflowJS } from "./gentle-intro-tfjs";
 
 try {
   main();
@@ -7,5 +8,6 @@ try {
 }
 
 function main() {
-  crudeALS();
+  genteleTensorflowJS();
+  // crudeALS();
 }
